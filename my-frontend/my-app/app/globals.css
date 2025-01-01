@@ -70,3 +70,64 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes fly-emoji {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(calc(-50% + var(--x)), calc(-50% + var(--y))) scale(1);
+  }
+}
+
+.emoji {
+  --x: 50px;
+  --y: -80px; /* Adjust these values for direction */
+}
+
+.emoji:nth-child(1) {
+  --x: -40px;
+  --y: -70px;
+}
+
+.emoji:nth-child(2) {
+  --x: 20px;
+  --y: -100px;
+}
+
+.emoji:nth-child(3) {
+  --x: 60px;
+  --y: -80px;
+}
+
+.emoji:nth-child(4) {
+  --x: -70px;
+  --y: -50px;
+}
+
+.emoji:nth-child(5) {
+  --x: 80px;
+  --y: -60px;
+}
+
+button:hover .emoji {
+  animation: fly-emoji 0.8s ease-out forwards;
+}
+@keyframes bubble {
+  0% {
+    transform: translateY(500px) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-600px) scale(0.8);
+    opacity: 0;
+  }
+}
+
+.animate-bubble {
+  animation-name: bubble;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
