@@ -7,26 +7,70 @@ import { Label } from "@radix-ui/react-label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Eye, EyeOff } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { loginUserThunk, registerUserThunk } from "@/store/thunks/authThunks";
+
 
 const AuthenticationPage: React.FC = () => {
+  const dispatch:AppDispatch = useDispatch();
   const router = useRouter();
-  const [isLoaded, setIsLoaded] = useState(false);
+  const { isLoading:loading, error,verified } = useSelector((state: RootState) => state.auth);
+
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
-  const togglePasswordVisibility = () => setPasswordVisible(!passwordVisible);
-  const toggleConfirmPasswordVisibility = () => setConfirmPasswordVisible(!confirmPasswordVisible);
+  const [registerForm, setRegisterForm] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
 
-  const handleTabChange = () => {
-    setIsLoaded(false);
-    setTimeout(() => {
-      setIsLoaded(true);
-    }, 100); // A short delay for smooth transition
+  const [loginForm, setLoginForm] = useState({
+    email: "",
+    password: "",
+  });
+
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    formType: "register" | "login"
+  ) => {
+    const { id, value } = e.target;
+    if (formType === "register") {
+      setRegisterForm((prev) => ({ ...prev, [id]: value }));
+    } else {
+      setLoginForm((prev) => ({ ...prev, [id]: value }));
+    }
   };
 
-  useEffect(() => {
-    setIsLoaded(true); // Initially load after a short delay
-  }, []);
+  const handleRegister = async () => {
+    if (registerForm.password !== registerForm.confirmPassword) {
+      alert("Passwords do not match!");
+      return;
+    }
+    await dispatch(
+      registerUserThunk({
+        name: registerForm.username,
+        email: registerForm.email,
+        password: registerForm.password,
+        confirmPassword: registerForm.confirmPassword,
+      })
+    );
+    if(verified)router.push("/dashboard"); // Redirect after successful registration
+    else alert("Registration failed");
+  };
+
+  const handleLogin = async () => {
+    await dispatch(
+      loginUserThunk({
+        email: loginForm.email,
+        password: loginForm.password,
+      })
+    );
+    if(verified)router.push("/dashboard"); // Redirect after successful login
+    else alert(error);
+  };
 
   return (
     <div className="relative flex justify-center items-center h-screen bg-yellow-400 overflow-hidden">
@@ -36,7 +80,7 @@ const AuthenticationPage: React.FC = () => {
           key={index}
           className="absolute w-32 h-32 bg-black rounded-full animate-bubble"
           style={{
-            left: `${Math.random() * 100-10}%`,
+            left: `${Math.random() * 100 - 10}%`,
             animationDuration: `${2 + Math.random() * 3}s`,
             animationDelay: `${Math.random()}s`,
           }}
@@ -66,11 +110,21 @@ const AuthenticationPage: React.FC = () => {
               <CardContent className="space-y-2">
                 <div className="space-y-1">
                   <Label htmlFor="username">Username</Label>
-                  <Input id="username" placeholder="Username" />
+                  <Input
+                    id="username"
+                    placeholder="Username"
+                    value={registerForm.username}
+                    onChange={(e) => handleInputChange(e, "register")}
+                  />
                 </div>
                 <div className="space-y-1">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" placeholder="Email" />
+                  <Input
+                    id="email"
+                    placeholder="Email"
+                    value={registerForm.email}
+                    onChange={(e) => handleInputChange(e, "register")}
+                  />
                 </div>
                 <div className="space-y-1 relative">
                   <Label htmlFor="password">Password</Label>
@@ -78,27 +132,31 @@ const AuthenticationPage: React.FC = () => {
                     id="password"
                     type={passwordVisible ? "text" : "password"}
                     placeholder="Password"
+                    value={registerForm.password}
+                    onChange={(e) => handleInputChange(e, "register")}
                     className="pr-10"
                   />
                   <button
                     type="button"
-                    onClick={togglePasswordVisibility}
+                    onClick={() => setPasswordVisible(!passwordVisible)}
                     className="absolute top-8 right-2 text-gray-500 focus:outline-none"
                   >
                     {passwordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
                   </button>
                 </div>
                 <div className="space-y-1 relative">
-                  <Label htmlFor="confirm_password">Confirm Password</Label>
+                  <Label htmlFor="confirmPassword">Confirm Password</Label>
                   <Input
-                    id="confirm_password"
+                    id="confirmPassword"
                     type={confirmPasswordVisible ? "text" : "password"}
                     placeholder="Confirm Password"
+                    value={registerForm.confirmPassword}
+                    onChange={(e) => handleInputChange(e, "register")}
                     className="pr-10"
                   />
                   <button
                     type="button"
-                    onClick={toggleConfirmPasswordVisibility}
+                    onClick={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
                     className="absolute right-2 top-8 text-gray-500 focus:outline-none"
                   >
                     {confirmPasswordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -106,7 +164,10 @@ const AuthenticationPage: React.FC = () => {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button>Register</Button>
+                <Button onClick={handleRegister} disabled={loading}>
+                  {loading ? "Registering..." : "Register"}
+                </Button>
+                {error && <p className="text-red-500">{error}</p>}
               </CardFooter>
             </Card>
           </TabsContent>
@@ -123,7 +184,13 @@ const AuthenticationPage: React.FC = () => {
               <CardContent className="space-y-2">
                 <div className="space-y-1">
                   <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" placeholder="Email" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Email"
+                    value={loginForm.email}
+                    onChange={(e) => handleInputChange(e, "login")}
+                  />
                 </div>
                 <div className="space-y-1 relative">
                   <Label htmlFor="password">Password</Label>
@@ -131,11 +198,13 @@ const AuthenticationPage: React.FC = () => {
                     id="password"
                     type={passwordVisible ? "text" : "password"}
                     placeholder="Password"
+                    value={loginForm.password}
+                    onChange={(e) => handleInputChange(e, "login")}
                     className="pr-10"
                   />
                   <button
                     type="button"
-                    onClick={togglePasswordVisibility}
+                    onClick={() => setPasswordVisible(!passwordVisible)}
                     className="absolute right-2 top-9 text-gray-500 focus:outline-none"
                   >
                     {passwordVisible ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -143,7 +212,10 @@ const AuthenticationPage: React.FC = () => {
                 </div>
               </CardContent>
               <CardFooter>
-                <Button>Login</Button>
+                <Button onClick={handleLogin} disabled={loading}>
+                  {loading ? "Logging in..." : "Login"}
+                </Button>
+                {error && <p className="text-red-500">{error}</p>}
               </CardFooter>
             </Card>
           </TabsContent>
