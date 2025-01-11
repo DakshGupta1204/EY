@@ -6,6 +6,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   comparePassword(password: string): Promise<boolean>;
+  courses: string[];
 }
 
 const userSchema = new Schema<IUser>({
@@ -22,6 +23,12 @@ const userSchema = new Schema<IUser>({
     type: String,
     required: true,
   },
+  courses: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Course',
+    },
+  ]
 });
 
 // Password comparison method
