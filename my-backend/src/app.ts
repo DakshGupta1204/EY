@@ -5,6 +5,7 @@ import compression from 'compression';
 import morgan from 'morgan';
 import { errorHandler } from './middlewares/errorHandler';
 import userRoutes from './routes/userRoutes';
+import recRoutes from './routes/recRoutes';
 import connectDB from './config/db';
 
 const app:Application = express();
@@ -19,6 +20,7 @@ app.use(morgan('dev'));
 
 // Routes
 app.use('', userRoutes);
+app.use('', recRoutes);
 app.get('/test', (req, res) => {
     res.send('Hello World');
     }
