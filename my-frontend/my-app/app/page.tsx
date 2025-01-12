@@ -187,15 +187,25 @@ const HomePage: React.FC = () => {
           >
             User
           </button>
-          {dropdownOpen && (
-            <div className="absolute right-0 mt-2 bg-black border border-yellow-400 rounded-md w-40">
+           
+            <div className={`absolute right-0 mt-2 bg-black border border-yellow-400 rounded-md w-40 ${!dropdownOpen?"hidden":""}`}>
               <button
                 className="block w-full text-left px-4 py-2 text-white font-bold hover:bg-yellow-400 hover:text-black"
                 onClick={() => {
                   setDropdownOpen(false);
+                  router.push("/profile");
                 }}
               >
                 Profile
+              </button>
+              <button
+                className="block w-full text-left px-4 py-2 text-white font-bold hover:bg-yellow-400 hover:text-black"
+                onClick={() => {
+                  setDropdownOpen(false);
+                  router.push("/courses");
+                }}
+              >
+                Courses
               </button>
               <button
                 className="block w-full text-left px-4 py-2 text-white font-bold hover:bg-yellow-400 hover:text-black"
@@ -207,7 +217,7 @@ const HomePage: React.FC = () => {
                 Login
               </button>
             </div>
-          )}
+          
         </div>
       </nav>
 

@@ -131,3 +131,23 @@ button:hover .emoji {
   animation-timing-function: ease-in-out;
   animation-iteration-count: infinite;
 }
+
+.quiz-page {
+  @apply flex flex-col items-center p-4 space-y-4;
+}
+
+.quiz-form {
+  @apply flex flex-col space-y-2;
+}
+
+.quiz {
+  @apply space-y-4;
+}
+
+.quiz-question {
+  @apply flex flex-col space-y-1;
+}
+
+.quiz-results {
+  @apply text-center font-bold text-lg;
+}

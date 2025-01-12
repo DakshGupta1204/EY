@@ -43,6 +43,7 @@ const authSlice = createSlice({
       state.user = action.payload.user;
       state.token = action.payload.token;
       localStorage.setItem('token', action.payload.token); // Optional: Save token to localStorage
+      localStorage.setItem('userId', action.payload.user.id); // Optional: Save userId to localStorage
       state.verified = true;
     });
     builder.addCase(registerUserThunk.rejected, (state, action: PayloadAction<any>) => {
@@ -57,11 +58,14 @@ const authSlice = createSlice({
     });
     builder.addCase(loginUserThunk.fulfilled, (state, action: PayloadAction<any>) => {
       state.isLoading = false;
-      state.user = action.payload.user;
       state.token = action.payload.token;
-      localStorage.setItem('token', action.payload.token); // Optional: Save token to localStorage
+      state.user = action.payload.user; // Now action.payload has the 'user' field
       state.verified = true;
+      localStorage.setItem('token', action.payload.token); // Save token to localStorage
+      localStorage.setItem('userId', action.payload.user._id); // Save userId to localStorage
+      
     });
+    
     builder.addCase(loginUserThunk.rejected, (state, action: PayloadAction<any>) => {
       state.isLoading = false;
       state.error = action.payload;

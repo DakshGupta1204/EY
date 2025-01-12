@@ -1,13 +1,31 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema, Types } from 'mongoose';
 import bcrypt from 'bcryptjs';
+
+interface ICourse {
+  id: Types.ObjectId; // Use Mongoose's `Types.ObjectId` here
+  title: string;
+  description: string;
+  url: string;
+  completed: boolean;
+  completedAssessments: number;
+}
 
 export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
   comparePassword(password: string): Promise<boolean>;
-  courses: string[];
+  courses: ICourse[];
 }
+
+const courseSchema = new Schema<ICourse>({
+  id: { type: Schema.Types.ObjectId, required: true },
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  url: { type: String, required: true },
+  completed: { type: Boolean, default: false },
+  completedAssessments: {type: Number, default: 0}
+});
 
 const userSchema = new Schema<IUser>({
   name: {
@@ -23,12 +41,7 @@ const userSchema = new Schema<IUser>({
     type: String,
     required: true,
   },
-  courses: [
-    {
-      type: Schema.Types.ObjectId,
-      ref: 'Course',
-    },
-  ]
+  courses: [courseSchema],
 });
 
 // Password comparison method

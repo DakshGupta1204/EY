@@ -57,7 +57,8 @@ const AuthenticationPage: React.FC = () => {
         confirmPassword: registerForm.confirmPassword,
       })
     );
-    if(verified)router.push("/dashboard"); // Redirect after successful registration
+    
+    if(verified)router.push("/"); // Redirect after successful registration
     else alert("Registration failed");
   };
 
@@ -68,9 +69,15 @@ const AuthenticationPage: React.FC = () => {
         password: loginForm.password,
       })
     );
-    if(verified)router.push("/dashboard"); // Redirect after successful login
-    else alert(error);
   };
+
+  useEffect(() => {
+    if (verified) {
+      router.push("/"); // Redirect to home page when verified is true
+    } else if (error) {
+      alert(error); // Show error if login failed
+    }
+  }, [verified, error, router]);
 
   return (
     <div className="relative flex justify-center items-center h-screen bg-yellow-400 overflow-hidden">
