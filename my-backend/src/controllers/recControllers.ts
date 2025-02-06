@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { Request, RequestHandler, Response } from 'express';
 
-const COLAB_BASE_URL = 'https://d9d2-35-185-48-155.ngrok-free.app/recommend'; 
-const COLAB_API_URL = 'https://7438-34-30-71-244.ngrok-free.app';
-const COLAB_BASE_URL2 = 'https://da0d-34-48-139-52.ngrok-free.app/recommend'
+const COLAB_BASE_URL = 'https://652c-34-86-5-35.ngrok-free.app/recommend'; 
+const COLAB_API_URL = 'https://7f32-34-30-71-244.ngrok-free.app';
+const COLAB_BASE_URL2 = 'https://65b4-35-229-210-177.ngrok-free.app/recommend'
 // Proxy route to forward requests to Colab
 
 export const recommendUser: RequestHandler = async (req:Request,res:Response):Promise<void> =>{

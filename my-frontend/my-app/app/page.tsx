@@ -7,10 +7,10 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Cover } from "@/components/ui/cover";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-// import image1 from "./feature1.png";
-// import image2 from "./feature2.png";
-// import image3 from "./feature3.png";
-// import image4 from "./feature4.png";
+import image1 from "./feature1.png";
+import image2 from "./feature2.png";
+import image3 from "./feature3.png";
+import image4 from "./feature4.png";
 
 
 const HomePage: React.FC = () => {
@@ -297,7 +297,7 @@ const HomePage: React.FC = () => {
         
         </div>
         <div className="border-4 border-black p-2 rounded-md">
-          <Image src="" width={400} height={400} alt="feature1"/>
+          <Image src={image1} width={400} height={400} alt="feature1"/>
         </div>
       </div>
 
@@ -317,7 +317,7 @@ const HomePage: React.FC = () => {
         </div>
         </div>
         <div className="border-4 border-black p-2 rounded-md">
-        <Image src="" width={400} height={400} alt="feature2"/>
+        <Image src={image2} width={400} height={400} alt="feature2"/>
         </div>
         
       </div>
@@ -338,7 +338,7 @@ const HomePage: React.FC = () => {
         </div>
         </div>
         <div className="border-4 border-black p-2 rounded-md">
-        <Image src="" width={400} height={400} alt="feature3"/>
+        <Image src={image3} width={400} height={400} alt="feature3"/>
         </div>
         
       </div>
@@ -359,7 +359,7 @@ const HomePage: React.FC = () => {
         </div>
         </div>
         <div className="border-4 border-black p-2 rounded-md">
-        <Image src="" width={400} height={400} alt="feature4"/>
+        <Image src={image4} width={400} height={400} alt="feature4"/>
         </div>
         
       </div>
